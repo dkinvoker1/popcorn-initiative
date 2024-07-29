@@ -6,7 +6,8 @@ import List from "@mui/material/List";
 import Box from "@mui/material/Box";
 
 import SkipNextRounded from "@mui/icons-material/SkipNextRounded";
-import FlipIcon from '@mui/icons-material/Flip';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 
 import OBR, { isImage, Item, Player } from "@owlbear-rodeo/sdk";
 
@@ -15,7 +16,8 @@ import { InitiativeItem } from "./InitiativeItem";
 import addIcon from "../../assets/add.svg";
 import removeIcon from "../../assets/remove.svg";
 
-import { InitiativeListItem } from "./InitiativeListItem";
+import { InitiativeListItem } from "./InitiativeListItem/InitiativeListItem";
+import { InitiativeSettings }from "./InitiativeSettings"
 import { getPluginId } from "../plugin/getPluginId";
 import { InitiativeHeader } from "./InitiativeHeader";
 import { isPlainObject } from "../util/isPlainObject";
@@ -34,6 +36,7 @@ function isMetadata(
 export function InitiativeTracker() {
   const [initiativeItems, setInitiativeItems] = useState<InitiativeItem[]>([]);
   const [role, setRole] = useState<"GM" | "PLAYER">("PLAYER");
+  const [initiativeSettings, setInitiativeSettings] = useState<InitiativeSettings>({ isVertical: true });
 
   useEffect(() => {
     const handlePlayerChange = (player: Player) => {
@@ -150,7 +153,8 @@ export function InitiativeTracker() {
   }
 
   function handleFlipAlignmentClick() {
-    OBR.action.setWidth(1000);
+    const newInitiativeSettings = { isVertical: !initiativeSettings.isVertical};
+    setInitiativeSettings(newInitiativeSettings);
   }
 
   function handleHasActionChange(id: string, newHasAction: boolean) {
@@ -225,11 +229,11 @@ export function InitiativeTracker() {
             <SkipNextRounded />
           </IconButton>
           <IconButton
-            aria-label="next"
+            aria-label="flip alignment"
             onClick={handleFlipAlignmentClick}
             disabled={initiativeItems.length === 0}
           >
-            <FlipIcon />
+            { initiativeSettings.isVertical ? <ViewColumnIcon /> : <TableRowsIcon /> }
           </IconButton>
         </>
         }
@@ -246,6 +250,7 @@ export function InitiativeTracker() {
                   handleHasActionChange(initiative.id, newHasAction);
                 }}
                 showHidden={role === "GM"}
+                isVertical={initiativeSettings.isVertical}
               />
             ))}
         </List>
