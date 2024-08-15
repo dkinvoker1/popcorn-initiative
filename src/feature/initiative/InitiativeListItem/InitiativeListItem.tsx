@@ -1,9 +1,3 @@
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Checkbox from "@mui/material/Checkbox";
-
-import VisibilityOffRounded from "@mui/icons-material/VisibilityOffRounded";
-
 import OBR, { Math2, Vector2 } from "@owlbear-rodeo/sdk";
 
 import { InitiativeItem } from "../InitiativeItem";
@@ -12,7 +6,7 @@ import { InitiativeListItemHorizontal } from "./InitiativeListItemHorizontal";
 
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
-  onHasActionChange: (hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
   showHidden: boolean;
   isVertical: boolean;
 };

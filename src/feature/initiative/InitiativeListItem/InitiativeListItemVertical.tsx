@@ -8,7 +8,7 @@ import { InitiativeItem } from "../InitiativeItem";
 
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
-  onHasActionChange: (hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
   showHidden: boolean;
   onDoubleClick: () => Promise<void>;
 };
@@ -24,22 +24,23 @@ export function InitiativeListItemVertical({
   }
 
   return (
-    <ListItem
+    <ListItem 
       key={initiative.id}
+      sx = {{
+        padding: "0px",
+        paddingLeft: "8px"
+      }}
       secondaryAction={
         <Checkbox
           checked={initiative.hasAction}
           onChange={(e) => {
-            onHasActionChange(e.target.checked);
+            onHasActionChange(initiative.id, e.target.checked);
           }}
           onDoubleClick={(e) => e.stopPropagation()}
+          disabled={!showHidden}
         />
       }
-      divider
       selected={initiative.active}
-      sx={{
-        pr: "64px",
-      }}
       onDoubleClick={onDoubleClick}
     >
       {!initiative.visible && showHidden && (

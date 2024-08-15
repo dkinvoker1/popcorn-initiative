@@ -9,7 +9,7 @@ import { InitiativeItem } from "../InitiativeItem";
 
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
-  onHasActionChange: (hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
   showHidden: boolean;
   onDoubleClick: () => Promise<void>;
 };
@@ -24,35 +24,32 @@ export function InitiativeListItemHorizontal({
     return null;
   }
 
-  return (
+  return ( 
     <ListItem
-      key={initiative.id}
-      divider
       selected={initiative.active}
-      sx={{
-        pr: "64px",
-      }}
-      onDoubleClick={onDoubleClick}
-    >      
-        <List>
-                <ListItem>
-                    {!initiative.visible && showHidden && (
-                    <ListItemIcon sx={{ minWidth: "30px", opacity: "0.5" }}>
-                    <VisibilityOffRounded fontSize="small" />
-                    </ListItemIcon>
-                )}
-                <Checkbox
-                    checked={initiative.hasAction}
-                    onChange={(e) => {
-                        onHasActionChange(e.target.checked);
-                    }}
-                    onDoubleClick={(e) => e.stopPropagation()}
-                />
-            </ListItem>
-            <ListItem>
-                <img src={initiative.imgSrc} width={80}/>
-            </ListItem>
-        </List>
+      dense = {true}
+    >
+      <List
+        onDoubleClick={onDoubleClick}>
+        <ListItem disablePadding = {true}>
+          {!initiative.visible && showHidden && (
+            <ListItemIcon sx={{ minWidth: "30px", opacity: "0.5" }}>
+              <VisibilityOffRounded fontSize="small" />
+            </ListItemIcon>
+          )}
+          <Checkbox
+              checked={initiative.hasAction}
+              onChange={(e) => {
+                  onHasActionChange(initiative.id, e.target.checked);
+              }}
+              onDoubleClick={(e) => e.stopPropagation()}
+              disabled={!showHidden}
+          />
+        </ListItem>
+        <ListItem disablePadding = {true}>
+            <img src={initiative.imgSrc} width={80}/>
+        </ListItem>
+      </List>
     </ListItem>
   );
 }
