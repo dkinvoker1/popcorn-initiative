@@ -10,17 +10,17 @@ import { InitiativeItem } from "../InitiativeItem";
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
   onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
-  showHidden: boolean;
+  isGm: boolean;
   onDoubleClick: () => Promise<void>;
 };
 
 export function InitiativeListItemHorizontal({
   initiative,
   onHasActionChange: onHasActionChange,
-  showHidden,
+  isGm: isGm,
   onDoubleClick: onDoubleClick,
 }: InitiativeListItemProps) {
-  if (!initiative.visible && !showHidden) {
+  if (!initiative.visible && !isGm) {
     return null;
   }
 
@@ -32,7 +32,7 @@ export function InitiativeListItemHorizontal({
       <List
         onDoubleClick={onDoubleClick}>
         <ListItem disablePadding = {true}>
-          {!initiative.visible && showHidden && (
+          {!initiative.visible && isGm && (
             <ListItemIcon sx={{ minWidth: "30px", opacity: "0.5" }}>
               <VisibilityOffRounded fontSize="small" />
             </ListItemIcon>
@@ -43,7 +43,7 @@ export function InitiativeListItemHorizontal({
                   onHasActionChange(initiative.id, e.target.checked);
               }}
               onDoubleClick={(e) => e.stopPropagation()}
-              disabled={!showHidden}
+              disabled={!isGm}
           />
         </ListItem>
         <ListItem disablePadding = {true}>

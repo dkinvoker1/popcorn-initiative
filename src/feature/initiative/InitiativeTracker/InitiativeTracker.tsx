@@ -176,12 +176,12 @@ export function InitiativeTracker() {
         <InitiativeTrackerVertical
           initiativeItems={initiativeItems}
           onHasActionChange={handleHasActionChange}
-          showHidden={role === "GM"}
+          isGm={role === "GM"}
         ></InitiativeTrackerVertical>
       : <InitiativeTrackerHorizontal
           initiativeItems={initiativeItems}
           onHasActionChange={handleHasActionChange}
-          showHidden={role === "GM"}
+          isGm={role === "GM"}
         ></InitiativeTrackerHorizontal>}
     </Stack>
   );

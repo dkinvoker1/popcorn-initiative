@@ -11,17 +11,17 @@ import { InitiativeItem } from "../InitiativeItem";
 type InitiativeTrackerHorizontalProps = {
   initiativeItems: InitiativeItem[];
   onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
-  showHidden: boolean;
+  isGm: boolean;
 };
 export function InitiativeTrackerHorizontal({
   initiativeItems,
   onHasActionChange: onHasActionChange,
-  showHidden,
+  isGm: isGm,
 }: InitiativeTrackerHorizontalProps) {
   const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    const visibleInitiative = initiativeItems.filter((initiative) => showHidden || initiative.visible);
+    const visibleInitiative = initiativeItems.filter((initiative) => isGm || initiative.visible);
 
     if (visibleInitiative.length < 1) {
       OBR.action.setHeight(129);
@@ -31,7 +31,10 @@ export function InitiativeTrackerHorizontal({
       // height
       OBR.action.setHeight(212);
       // width
-      OBR.action.setWidth(visibleInitiative.length*112);
+      const minWidth = isGm ? 230 : 150;
+      var calculatedWidth = visibleInitiative.length*112;
+
+      OBR.action.setWidth(Math.max(minWidth, calculatedWidth));
     }
   }, [initiativeItems.length]);
 
@@ -44,7 +47,7 @@ export function InitiativeTrackerHorizontal({
                 key={initiative.id}
                 initiative={initiative}
                 onHasActionChange={onHasActionChange}
-                showHidden={showHidden}
+                isGm={isGm}
                 isVertical={false}
               />
             ))}

@@ -7,17 +7,17 @@ import { InitiativeListItemHorizontal } from "./InitiativeListItemHorizontal";
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
   onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
-  showHidden: boolean;
+  isGm: boolean;
   isVertical: boolean;
 };
 
 export function InitiativeListItem({
   initiative,
   onHasActionChange: onHasActionChange,
-  showHidden,
+  isGm: isGm,
   isVertical,
 }: InitiativeListItemProps) {
-  if (!initiative.visible && !showHidden) {
+  if (!initiative.visible && !isGm) {
     return null;
   }
 
@@ -67,13 +67,13 @@ export function InitiativeListItem({
       <InitiativeListItemVertical
         initiative={initiative}
         onHasActionChange={onHasActionChange}
-        showHidden={showHidden}
+        isGm={isGm}
         onDoubleClick={handleDoubleClick}
       />
     : <InitiativeListItemHorizontal
         initiative={initiative}
         onHasActionChange={onHasActionChange}
-        showHidden={showHidden}
+        isGm={isGm}
         onDoubleClick={handleDoubleClick}
       />  
   );
