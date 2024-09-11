@@ -6,7 +6,7 @@ import { InitiativeListItemHorizontal } from "./InitiativeListItemHorizontal";
 
 type InitiativeListItemProps = {
   initiative: InitiativeItem;
-  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean, index: number) => void;
   isGm: boolean;
   isVertical: boolean;
 };

@@ -3,5 +3,5 @@ export interface InitiativeItem {
   id: string;
   active: boolean;
   visible: boolean;
-  hasAction: boolean;
+  hasActionArray: boolean[];
 }

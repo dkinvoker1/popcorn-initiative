@@ -10,7 +10,7 @@ import { InitiativeItem } from "../InitiativeItem";
 
 type InitiativeTrackerHorizontalProps = {
   initiativeItems: InitiativeItem[];
-  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean, index: number) => void;
   isGm: boolean;
 };
 export function InitiativeTrackerHorizontal({
@@ -29,18 +29,25 @@ export function InitiativeTrackerHorizontal({
     }
     else{
       // height
-      OBR.action.setHeight(212);
+      const baseHeight = 212;
+      const gmAdditionalHeight = isGm ? 40 : 0;
+
+      OBR.action.setHeight(baseHeight + gmAdditionalHeight);
       // width
       const minWidth = isGm ? 230 : 150;
-      var calculatedWidth = visibleInitiative.length*112;
-
+      var calculatedWidth = visibleInitiative.length * 158
       OBR.action.setWidth(Math.max(minWidth, calculatedWidth));
     }
-  }, [initiativeItems.length]);
+  }, [initiativeItems.filter((initiative) => isGm || initiative.visible).length]);
 
   return (
       <Box sx={{ overflowX: "auto", overflowY: "auto" }}>
-        <List ref={listRef} component={Stack} direction="row" dense={true}>
+        <List 
+          ref={listRef}
+          component={Stack}
+          direction="row"
+          dense={true}
+        >
           {initiativeItems
             .map((initiative) => (
               <InitiativeListItem

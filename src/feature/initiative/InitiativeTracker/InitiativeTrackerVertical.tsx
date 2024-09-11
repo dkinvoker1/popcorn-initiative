@@ -9,7 +9,7 @@ import { InitiativeItem } from "../InitiativeItem";
 
 type InitiativeTrackerVerticalProps = {
   initiativeItems: InitiativeItem[];
-  onHasActionChange: (initiativeId: string, hasAction: boolean) => void;
+  onHasActionChange: (initiativeId: string, hasAction: boolean, index: number)=> void;
   isGm: boolean;
 };
 export function InitiativeTrackerVertical({
@@ -21,21 +21,20 @@ export function InitiativeTrackerVertical({
 
   useEffect(() => {
     const visibleInitiative = initiativeItems.filter((initiative) => isGm || initiative.visible);
+    
+    //width
+    const baseWidth = visibleInitiative.length > 0 ? 230 : 200;
+    const gmAdditionalWidth = isGm ? 70 : 0;
+    
+    OBR.action.setWidth(baseWidth + gmAdditionalWidth);
+    
+    //height
+    const baseHeight = visibleInitiative.length > 0 ? 48 : 129; 
+    const visibleItemsHeight = visibleInitiative.length * 80 + 24;
+    const visibleItemsPaddingHeight = visibleInitiative.length * 16;
 
-    if (visibleInitiative.length < 1) {
-      
-      const add = isGm ? 80 : 0;
-      OBR.action.setHeight(129 + add);
-      OBR.action.setWidth(200 + add);
-    }
-    else{
-      // height
-      OBR.action.setHeight(48 + visibleInitiative.length*80+24);
-      // width
-      const add = isGm ? 80 : 0;
-      OBR.action.setWidth(150 + add);
-    }
-  }, [initiativeItems.length]);
+    OBR.action.setHeight(baseHeight + visibleItemsHeight + visibleItemsPaddingHeight);
+  }, [initiativeItems.filter((initiative) => isGm || initiative.visible).length]);
 
   return (
       <Box sx={{ overflowY: "auto" }}>

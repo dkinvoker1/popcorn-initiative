@@ -18,10 +18,10 @@ import { isPlainObject } from "../../util/isPlainObject";
 /** Check that the item metadata is in the correct format */
 function isMetadata(
   metadata: unknown
-): metadata is { hasAction: boolean; active: boolean } {
+): metadata is { hasActionArray: boolean[]; active: boolean } {
   return (
     isPlainObject(metadata) &&
-    typeof metadata.hasAction === "boolean" &&
+    Array.isArray(metadata.hasActionArray) &&
     typeof metadata.active === "boolean"
   );
 }
@@ -51,7 +51,7 @@ export function InitiativeTracker() {
               imgSrc: item.image.url,
               active: metadata.active,
               visible: item.visible,
-              hasAction: metadata.hasAction,
+              hasActionArray: metadata.hasActionArray,
             });
           }
         }
@@ -102,7 +102,7 @@ export function InitiativeTracker() {
           for (let item of items) {
             if (addToInitiative) {
               item.metadata[getPluginId("metadata")] = {
-                hasAction: true,
+                hasActionArray: [true],
                 active: false,
               };
             } else {
@@ -119,7 +119,7 @@ export function InitiativeTracker() {
     setInitiativeSettings(newInitiativeSettings);
   }
 
-  function handleHasActionChange(id: string, newHasAction: boolean) {
+  function handleHasActionChange(id: string, newHasAction: boolean, changedIndex: number) {
     if (role !== "GM") {
       return;
     }
@@ -130,7 +130,10 @@ export function InitiativeTracker() {
         if (initiative.id === id) {
           return {
             ...initiative,
-            hasAction: newHasAction,
+            hasActionArray: initiative.hasActionArray.map((value, index) => (
+              changedIndex === index?
+              newHasAction:value
+            )),
             active: true
           };
         } else {
@@ -149,7 +152,10 @@ export function InitiativeTracker() {
           const metadata = item.metadata[getPluginId("metadata")];
           if (isMetadata(metadata)) {
             if (item.id === id){
-              metadata.hasAction = newHasAction;
+              metadata.hasActionArray = metadata.hasActionArray.map((value, index) => (
+                changedIndex === index?
+                newHasAction:value
+              ));
               metadata.active = true;
             } else {
               metadata.active = false;
